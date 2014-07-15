@@ -76,16 +76,11 @@ exec(win, fail, 'FileTransfer', 'upload',
                 WinJS.xhr({ type: "POST", url: server, data: formData, headers: headers }).then(function (response) {
                     storageFile.getBasicPropertiesAsync().done(function (basicProperties) {
 
-                        Windows.Storage.FileIO.readBufferAsync(storageFile).done(function (buffer) {
-                            var dataReader = Windows.Storage.Streams.DataReader.fromBuffer(buffer);
-                            var fileContent = dataReader.readString(buffer.length);
-                            dataReader.close();
-                            var ftResult = new FileUploadResult();
-                            ftResult.bytesSent = basicProperties.size;
-                            ftResult.responseCode = response.status;
-                            ftResult.response = fileContent;
-                            successCallback && successCallback(ftResult);
-                        });
+                        var ftResult = new FileUploadResult();
+                        ftResult.bytesSent = basicProperties.size;
+                        ftResult.responseCode = response.status;
+                        ftResult.response = response.response;
+                        successCallback && successCallback(ftResult);
 
                     });
                 }, function () {
